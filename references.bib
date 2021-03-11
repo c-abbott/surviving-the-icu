@@ -73,3 +73,21 @@ issn = {23318422},
 title = {{CausalML: Python package for causal machine learning}},
 year = {2020}
 }
+
+@article{Ke2019,
+   abstract = {Meta-learning over a set of distributions can be interpreted as learning different types of parameters corresponding to short-term vs long-term aspects of the mechanisms underlying the generation of data. These are respectively captured by quickly-changing parameters and slowly-changing meta-parameters. We present a new framework for meta-learning causal models where the relationship between each variable and its parents is modeled by a neural network, modulated by structural meta-parameters which capture the overall topology of a directed graphical model. Our approach avoids a discrete search over models in favour of a continuous optimization procedure. We study a setting where interventional distributions are induced as a result of a random intervention on a single unknown variable of an unknown ground truth causal model, and the observations arising after such an intervention constitute one meta-example. To disentangle the slow-changing aspects of each conditional from the fast-changing adaptations to each intervention, we parametrize the neural network into fast parameters and slow meta-parameters. We introduce a meta-learning objective that favours solutions robust to frequent but sparse interventional distribution change, and which generalize well to previously unseen interventions. Optimizing this objective is shown experimentally to recover the structure of the causal graph. Finally, we find that when the learner is unaware of the intervention variable, it is able to infer that information, improving results further and focusing the parameter and meta-parameter updates where needed.},
+   author = {Nan Rosemary Ke and Olexa Bilaniuk and Anirudh Goyal and Stefan Bauer and Hugo Larochelle and Chris Pal and Yoshua Bengio},
+   issn = {23318422},
+   journal = {arXiv},
+   title = {Learning neural causal models from unknown interventions},
+   year = {2019},
+}
+@article{Goudet2017,
+   abstract = {We present Causal Generative Neural Networks (CGNNs) to learn functional causal models from observational data. CGNNs leverage conditional independencies and distributional asymmetries to discover bivariate and multivariate causal structures. CGNNs make no assumption regarding the lack of confounders, and learn a differentiable generative model of the data by using backpropagation. Extensive experiments show their good performances comparatively to the state of the art in observational causal discovery on both simulated and real data, with respect to cause-effect inference, v-structure identification, and multivariate causal discovery.},
+   author = {Olivier Goudet and Diviyan Kalainathan and Philippe Caillou and Isabelle Guyon and David Lopez-Paz and Michèle Sebag},
+   issn = {23318422},
+   journal = {arXiv},
+   title = {Causal generative neural networks},
+   year = {2017},
+}
+
