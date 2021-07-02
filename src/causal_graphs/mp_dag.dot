@@ -1,0 +1,11 @@
+digraph {
+adm_mrs -> drain;
+age -> antiplatelet;
+age -> thickness_sum;
+antiplatelet -> recurrence;
+drain -> recurrence;
+gcs_preop -> drain;
+age -> recurrence;
+thickness_sum -> adm_mrs;
+thickness_sum -> gcs_preop;
+thickness_sum -> recurrence}

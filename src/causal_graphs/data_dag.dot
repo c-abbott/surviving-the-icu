@@ -1,0 +1,29 @@
+digraph {
+age -> arrhythmia;
+age -> copd;
+age -> ihd ;
+age -> metalvalve;
+age -> platelet;
+age -> stroke;
+age -> thickness_sum;
+antiplatelet -> inr;
+bilateral -> thickness_sum;
+copd -> steroid;
+drain -> recurrence;
+epilepsy -> steroid;
+gcs_preop -> recurrence;
+hospital -> drain;
+ihd -> antiplatelet;
+ihd -> arrhythmia;
+ihd -> metalvalve;
+ihd -> recurrence;
+membranes -> density;
+metalvalve -> recurrence;
+platelet -> inr;
+stroke -> antiplatelet;
+stroke -> epilepsy;
+thickness_sum -> drain;
+thickness_sum -> membranes;
+thickness_sum -> midlineshift;
+thickness_sum -> recurrence;
+}
