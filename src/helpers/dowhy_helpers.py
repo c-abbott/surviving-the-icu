@@ -73,3 +73,4 @@ def bin_glm_estimator(model, estimand, ci=False, test_significance=False):
                                     treatment_value=1, confidence_intervals=ci, test_significance=test_significance,
                                     method_params={'glm_family':statsmodels.api.families.Binomial()})
     return glm_est
+
