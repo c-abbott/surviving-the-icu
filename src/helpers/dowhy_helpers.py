@@ -73,4 +73,57 @@ def bin_glm_estimator(model, estimand, ci=False, test_significance=False):
                                     treatment_value=1, confidence_intervals=ci, test_significance=test_significance,
                                     method_params={'glm_family':statsmodels.api.families.Binomial()})
     return glm_est
+ 
+def plot_ipw_interpreter(est, confounder):
+    """
+    Input:
+        est (dowhy.CausalEstimate) - Causal estimate from DoWhy
+        confounder (str) - Confounder whose weights before and after IPW you'd like to visualize
 
+    Output:
+        Plot of weights associated with confounder before and after IPW is applied.
+    """
+    cols = est.estimator._observed_common_causes_names + est.estimator._treatment_name
+    df = est.estimator._data[cols]
+    treated = est.estimator._treatment_name[0]
+    propensity = est.propensity_scores
+
+    # add weight column
+    df["weight"] = df[treated] * (propensity) ** (-1) + (1 - df[treated]) * (1 - propensity) ** (-1)
+
+    # before weights are applied we count number rows in each category
+    # which is equivalent to summing over weight=1
+    barplot_df_before = df.groupby([confounder, treated]).size().reset_index(name="count")
+
+    # # after weights are applied we need to sum over the given weights
+    barplot_df_after = df.groupby([confounder, treated]).agg({'weight': np.sum}).reset_index()
+    barplot_df_after.rename(columns={'weight': 'count'}, inplace=True)
+
+    title1 = "Distribution of " + confounder + " before applying the weights"
+    title2 = "Distribution of " + confounder + " after applying the weights"
+
+    import matplotlib.pyplot as plt
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+    iterable = zip([barplot_df_before, barplot_df_after], [ax1, ax2], [title1, title2])
+    for plot_df, ax, title in iterable:
+        aggregated_not_treated = plot_df[plot_df["drain"] == False]
+        aggregated_treated = plot_df[plot_df["drain"] == True]
+
+        labels_not_treated = aggregated_not_treated[confounder]
+        labels_treated = aggregated_treated[confounder]
+
+        not_treated_counts = aggregated_not_treated['count']
+        treated_counts = aggregated_treated['count']
+    
+        ax.grid(zorder=1)
+        ax.bar(labels_not_treated - 0.35 / 2, not_treated_counts, 0.35, label='Untreated', zorder=2)
+        ax.bar(labels_treated + 0.35 / 2, treated_counts, 0.35, label='Treated', zorder=2)
+        ax.set_xlabel(confounder)
+        ax.set_ylabel('Count')
+        ax.set_title(title, fontsize=12)
+        ax.set_xticks(labels_treated)
+        ax.set_xticklabels(labels_treated)
+        ax.legend()
+    
+    fig.tight_layout()
+    plt.show()
