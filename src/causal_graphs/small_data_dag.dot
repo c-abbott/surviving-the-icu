@@ -1,0 +1,17 @@
+digraph {
+age -> metalvalve;
+age -> platelet;
+age -> stroke;
+age -> thickness_sum;
+antiplatelet -> inr;
+drain -> recurrence;
+hospital -> drain;
+ihd -> antiplatelet;
+ihd -> metalvalve;
+ihd -> recurrence;
+metalvalve -> recurrence;
+platelet -> inr;
+stroke -> antiplatelet;
+thickness_sum -> drain;
+thickness_sum -> recurrence
+}
