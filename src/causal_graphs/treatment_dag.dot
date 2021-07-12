@@ -1,0 +1,28 @@
+digraph {
+age -> metalvalve;
+age -> platelet;
+age -> stroke;
+age -> ihd;
+age -> thickness_sum;
+antiplatelet -> inr;
+antiplatelet -> recurrence;
+bedrest -> recurrence;
+burrhole_num -> recurrence;
+drain -> recurrence;
+hospital -> drain;
+hospital -> bedrest;
+ihd -> antiplatelet;
+ihd -> metalvalve;
+ihd -> recurrence;
+membranes -> optype;
+metalvalve -> recurrence;
+optype -> burrhole_num;
+optype -> recurrence;
+platelet -> inr;
+stroke -> antiplatelet;
+thickness_sum -> membranes;
+thickness_sum -> optype;
+thickness_sum -> burrhole_num;
+thickness_sum -> drain;
+thickness_sum -> recurrence;
+}
