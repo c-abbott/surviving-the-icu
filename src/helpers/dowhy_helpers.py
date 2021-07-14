@@ -3,14 +3,16 @@ import statsmodels
 
 def naive_estimate(df, treatment, outcome, treatment_type=None):
     """
+    Performs estimate of ATE without adjusting for any counfounding.
+
     Input:
-        df (pd.DataFrame) - Dataframe holding data in question.
-        treatment (str) - Name of treatment variable. Must be binary.
-        outcome (str) -  Name of outcome variable.
-        treatment_type (str) - Type of treatment variable. Accepted types: bool, int.
+        df (pd.DataFrame) - Dataframe holding data in question
+        treatment (str) - Name of treatment variable. Must be binary
+        outcome (str) -  Name of outcome variable
+        treatment_type (str) - Type of treatment variable. Accepted types: bool, int
 
     Output:
-        naive_est (float64) - Causal estimate with no confounders adjusted for.
+        naive_est (float64) - Causal estimate with no confounders adjusted for
     """
     # Variable type checking
     accepted_types = ['bool', 'int']
@@ -28,9 +30,12 @@ def naive_estimate(df, treatment, outcome, treatment_type=None):
 
 def print_estimate_comparison(naive_est, causal_est, estimation_method):
     """
+    Prints a comparison between a causal estimate of the ATE to a naive estimate
+    of the ATE.
+
     Input:
-        naive_est (float64) - naive_causal.
-        causal_est (dowhy.Causal estimate) - Causal estimate of identified estimand.
+        naive_est (float64) - naive estimate of ATE
+        causal_est (dowhy.Causal estimate) - Causal estimate of identified estimand
         estimation_method (str) - Estimation technique used to obtain causal estimate
 
     Output:
@@ -44,6 +49,9 @@ def print_estimate_comparison(naive_est, causal_est, estimation_method):
 
 def linear_regression_estimator(model, estimand, ci=False, test_significance=False):
     """
+    Estimates an identified causal estimand using a linear regression model. Note that treatment 
+    must be binary (0/1).
+
     Input:
         model (dowhy.CausalModel) - Causal graph.
         estimand (dowhy.IdentifiedEstimand) - Causal estimand P(Y|do(T)) derived from model.
@@ -60,6 +68,9 @@ def linear_regression_estimator(model, estimand, ci=False, test_significance=Fal
 
 def bin_glm_estimator(model, estimand, ci=False, test_significance=False):
     """
+    Estimates an identified causal estimand using a binomial generalized linear model (logistic regression).
+    Note that treatment must be binary (0/1).
+
     Input:
         model (dowhy.CausalModel) - Causal graph.
         estimand (dowhy.IdentifiedEstimand) - Causal estimand P(Y|do(T)) derived from model.
@@ -76,6 +87,9 @@ def bin_glm_estimator(model, estimand, ci=False, test_significance=False):
  
 def plot_ipw_interpreter(est, confounder):
     """
+    Plots the weights associated with a confounder in a causal model before and after inverse
+    probability weighting (IPW).
+    
     Input:
         est (dowhy.CausalEstimate) - Causal estimate from DoWhy
         confounder (str) - Confounder whose weights before and after IPW you'd like to visualize
