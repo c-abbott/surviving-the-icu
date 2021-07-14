@@ -265,3 +265,46 @@ def randomized_search_cv(Xtrain, ytrain, search_space, n_iter=100, score='roc_au
         
     return cv_scores, configs, best_estimator
 
+def get_test_scores(Xtrain, ytrain, Xtest, ytest, clf):
+    """
+    
+    Maximises a cross-validation score (AUROC) by random search.
+    
+    Parameters
+    ------------
+    Xtrain: nd array, (n_samples, n_features)
+        Features used for training
+    
+    ytrain: nd array, (n_samples,)
+        Labels used for training
+        
+    Xtest: nd array, (n_samples, n_features)
+        Features used for testing
+    
+    ytest: nd array, (n_samples,)
+        Labels used for testing
+
+    clf: sklearn classifier object 
+        e.g. GradientBoostingClassifier()
+
+    Output
+    --------
+        None
+    """
+    # Refit classifier
+    clf.fit(Xtrain, ytrain)
+
+    # Compute performance metrics
+    ca_rf_test = clf.score(Xtest, ytest)
+    auroc_rf_test = roc_auc_score(ytest, clf.predict(Xtest))
+    recall_rf_test = recall_score(ytest, clf.predict(Xtest))
+    f1_rf_test = f1_score(ytest, clf.predict(Xtest))
+    ce_rf_test = log_loss(ytest, clf.predict(Xtest))
+
+    # Printing
+    print("Performance on the test set")
+    print("Classification accuracy:", ca_rf_test)
+    print("AUROC:", auroc_rf_test)
+    print("Recall:", recall_rf_test)
+    print("F1 Score:", f1_rf_test)
+    print("Log-loss:", ce_rf_test)
