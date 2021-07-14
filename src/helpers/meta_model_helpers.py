@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 from sklearn.metrics import log_loss, recall_score, f1_score, roc_auc_score
 
 def train_and_validate_classifiers(Xtrain, ytrain, Xval, yval,  names, classifiers):
@@ -5,7 +8,8 @@ def train_and_validate_classifiers(Xtrain, ytrain, Xval, yval,  names, classifie
     Trains and validates a set of binary classifiers on a training and held-out validation set. Metrics 
     used to evaluate classifier performance are: accuracy, AUROC, recall, F1 score and cross-entropy log-loss.
 
-    Input:
+    Parameters
+    ----------
         Xtrain: np.array of (n_samples, n_features)     - Training set
         ytrain: np.array of (n_samples,)                - Training labels
         Xval: np.array of (n_val_samples, n_features)   - Validation set
@@ -13,7 +17,8 @@ def train_and_validate_classifiers(Xtrain, ytrain, Xval, yval,  names, classifie
         names: list of strings                          - Names of classifiers you are training
         classifiers: list of sklearn classifier objects - Set of classifiers you wish to train
 
-    Output:
+    Output
+    ----------
         training_scores: list of 5 dictionaries - Set of training scores
         val_scores: list of 5 dictionaries      - Set of validation scores
     """
@@ -57,13 +62,11 @@ def print_metrics_table(training_scores, val_scores, names):
     Prints accuracy, AUROC, recall, F1 score and cross entropy loss metrics as a table
     for training and validation set comparison.
 
-    Input:
+    Parameters
+    ----------
         training_scores: list of 5 dictionaries - Set of training scores
         val_scores: list of 5 dictionaries      - Set of validation scores
         names: list of strings                  - Names of classifiers you are training
-
-    Output:
-        None
     """
     print('Classification performance on validation set: \n')
     print("{0:<10s}   {1:-^43s}   {2:-^43s}".format('','Validation', 'Training'))
@@ -86,3 +89,41 @@ def print_metrics_table(training_scores, val_scores, names):
             train_logloss=training_scores[4][clf]
             )
         )
+
+def plot_confusion_matrix(cm, class_labels=None):
+    """
+    Plots a confusion matrix using seaborn's heatmap function
+    
+    Columns and rows are labelled with the strings provided in class_labels.
+    
+    Parameters
+    ----------
+    cm: array-like
+        contains the confusion matrix
+        
+    class_labels: array-like, optional
+        contains the string labels
+            
+    """
+    
+    # check whether we have count data or not
+    if issubclass(cm.dtype.type, np.integer):
+        fmt = 'd'
+    else:
+        fmt = '.2f'
+        
+    if class_labels is not None:
+        plt.subplots(1, 1, figsize=(8,6))
+        sns.heatmap(cm, cmap='viridis',xticklabels=class_labels, yticklabels=class_labels,\
+                    annot=True, annot_kws={"fontsize":15},  fmt=fmt)  # controls the display of the numbers
+    else:
+        plt.subplots(1, 1, figsize=(8,6))
+        sns.heatmap(cm, cmap='viridis', annot=True, annot_kws={"fontsize":15},  fmt=fmt)
+        
+    plt.ylabel('True label', fontsize=20)
+    plt.xlabel('Predicted label', fontsize=20)
+    
+    # Format xtick and ttick labels
+    plt.setp(plt.gca().get_xticklabels(),
+         rotation_mode="anchor", fontsize=16)
+    plt.setp(plt.gca().get_yticklabels(), fontsize=16)
