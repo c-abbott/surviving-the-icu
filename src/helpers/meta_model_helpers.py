@@ -52,8 +52,37 @@ def train_and_validate_classifiers(Xtrain, ytrain, Xval, yval,  names, classifie
     val_scores = [ca_val_score, auroc_val_score, recall_val_score, f1_val_score, ce_val_score]
     return training_scores, val_scores
 
-def print_metrics_table(training_scores, validation_scores, names):
+def print_metrics_table(training_scores, val_scores, names):
     """
-    Prints a 
+    Prints accuracy, AUROC, recall, F1 score and cross entropy loss metrics as a table
+    for training and validation set comparison.
 
+    Input:
+        training_scores: list of 5 dictionaries - Set of training scores
+        val_scores: list of 5 dictionaries      - Set of validation scores
+        names: list of strings                  - Names of classifiers you are training
+
+    Output:
+        None
     """
+    print('Classification performance on validation set: \n')
+    print("{0:<10s}   {1:-^43s}   {2:-^43s}".format('','Validation', 'Training'))
+    print("{0:<10s}{1:>9s}{2:>9s}{3:>9s}{4:>9s}{5:>9s}{6:>9s}{7:>9s}{8:>9s}{9:>9s}{10:>9s}".format(
+        'Method', 'Acc\u2191', 'AUROC\u2191', 'Recall\u2191', 'F1\u2191', 'LL\u2193',
+        'Acc\u2191', 'AUROC\u2191', 'Recall\u2191', 'F1\u2191', 'LL\u2193'))
+    print("-"*(10+10*9))
+    for clf in names:
+        print ("{method:<10s}{val_accuracy:>9.3f}{val_auroc:>9.3f}{val_recall:>9.3f}{val_f1:>9.3f}{val_logloss:>8.3f}{train_accuracy:>9.3f}{train_auroc:>9.3f}{train_recall:>9.3f}{train_f1:>9.3f}{train_logloss:>9.3f}".format(
+            method=clf, 
+            val_accuracy = val_scores[0][clf],
+            val_auroc = val_scores[1][clf],
+            val_recall = val_scores[2][clf],
+            val_f1 = val_scores[3][clf],
+            val_logloss = val_scores[4][clf],
+            train_accuracy = training_scores[0][clf], 
+            train_auroc = training_scores[1][clf],
+            train_recall = training_scores[2][clf],
+            train_f1 = training_scores[3][clf],
+            train_logloss=training_scores[4][clf]
+            )
+        )
