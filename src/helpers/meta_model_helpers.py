@@ -1,7 +1,27 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.stats as stats
 import seaborn as sns
 from sklearn.metrics import log_loss, recall_score, f1_score, roc_auc_score
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+class MyRandInt():
+    """
+        Wrapper class to return multivariate rand ints"
+    """
+    
+    def __init__(self, low, high, dim):
+        self.low = low
+        self.high = high
+        self.dim = dim
+    
+    def rvs(self, random_state=None):
+        # increase proba to sample most complex config (hack, don't take too seriously)
+        if stats.bernoulli.rvs(0.1):
+            return np.full(self.dim, self.high, dtype=int)
+        else:
+            return stats.randint.rvs(self.low, self.high, size=(1, self.dim), random_state=random_state)[0]
 
 def train_and_validate_classifiers(Xtrain, ytrain, Xval, yval,  names, classifiers):
     """
@@ -127,3 +147,121 @@ def plot_confusion_matrix(cm, class_labels=None):
     plt.setp(plt.gca().get_xticklabels(),
          rotation_mode="anchor", fontsize=16)
     plt.setp(plt.gca().get_yticklabels(), fontsize=16)
+
+def randomized_search_cv(Xtrain, ytrain, search_space, n_iter=100, score='roc_auc', cv=None, refit=True, verbose=False):
+    """
+    Maximises a cross-validation score (AUROC) by random search.
+    
+    Parameters
+    ------------
+    Xtrain : nd array, (n_samples, n_features)
+        Features used for training
+    
+    ytrain: nd array, (n_samples,)
+        Labels used for training
+        
+    search_space: list
+        Each element of the list must be a tuple (id, classifier_object, param_distributions)
+        - id is a string
+        - classifier_object is an instance of a classifier
+        - param_distributions is a dictionary defining the search space of the hyperparameters,
+          the entries can either be lists, or objects implementing a rvs() method returning a
+          random sample.
+          
+    n_iter: int
+        Number of trials in the random search
+    
+    score: str
+        Metric to maximise, see sklearn docs for valid strings
+        
+    cv: int, cross-validation generator or an iterable, default=None
+        Determines the cross-validation splitting strategy, used with
+        sklearn.model_selection.cross_val_score
+        
+    refit: bool
+        Refit best estimator on the whole dataset
+    
+    verbose: bool
+        Prints debug info
+    
+    Output
+    --------
+    cv_scores: list
+        list with cv scores
+    
+    configs: list
+        list with sampled configurations
+        
+    best_estimator: 
+        refitted estimator (if refit=True, else None is returned)
+    
+    """
+    # 5-fold cross validation as deafult
+    if cv is None:
+        cv = StratifiedKFold(n_splits=5, shuffle=True)                              
+
+    if verbose:
+        print("cv strategy", cv)
+        
+    # Number of classifiers
+    L = len(search_space)
+    # Random search
+    cv_scores = []
+    configs = []
+    
+    for trial in range(0, n_iter):
+        if verbose:
+            print("--"*20)
+            print("Trial", trial)
+            print("--"*20)
+        # pick classifier
+        index = np.random.choice(L)
+        
+        # sample a parameter configuration for the selected classifier   
+        my_id = search_space[index][0]
+        clf = search_space[index][1]
+        param_distr = search_space[index][2]
+        
+        # sample hyperparameters
+        param_dict = {}
+        for k, v in param_distr.items():
+            if isinstance(v, list):
+                # sample from list
+                param_dict[k] = np.random.choice(v)
+            else:
+                # sample from distribution
+                param_dict[k] = v.rvs()
+
+        # construct pipeline
+        pipe = Pipeline([(my_id, clf)])
+        pipe.set_params(**param_dict)
+        if verbose:
+            print("Parameters", param_dict)
+            print("Pipeline:", pipe)
+            
+        # compute cv score
+        scores_tmp = cross_val_score(pipe, Xtrain, ytrain, cv=cv, scoring=score, n_jobs=-1)
+        if verbose:
+            print("cv score:", scores_tmp)
+                
+        # store
+        cv_scores.append(np.mean(scores_tmp))
+        configs.append(pipe)
+    
+    # Refit best set of hyperparameters
+    if refit:
+        print("--"*20)
+        print("Selecting and refitting best classifier")
+        print("--"*20)
+        best_index = np.argmax(cv_scores)
+        best_score = cv_scores[best_index]
+        best_estimator = configs[best_index]
+        best_estimator.fit(Xtrain, ytrain)
+        if verbose:
+            print("best score:", best_score)
+            print("best pipe:", best_estimator)
+    else:
+        best_estimator = None
+        
+    return cv_scores, configs, best_estimator
+
