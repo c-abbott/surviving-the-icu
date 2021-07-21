@@ -43,20 +43,20 @@ tmle_min <- tmle(Y=Y, A=A, W=W_min)
 cat("tmle_min_psi:", tmle_min$estimates[[2]][[1]],";", "95%CI(", tmle_min$estimates[[2]][[3]],")")
 
 ### Non-parametric ATE estimation with TMLE (min DAG)
-sl_tmle_min <- tmle(Y=Y, A=A, W=W_min, family="binomial", V=5,
+sl_tmle_min <- tmle(Y=Y, A=A, W=W_min, family="binomial", V=10,
                     Q.SL.library = sl_libs,
                     g.SL.library = sl_libs)
 cat("sl_tmle_min:", sl_tmle_min$estimates[[2]][[1]],";", "95%CI(", sl_tmle_min$estimates[[2]][[3]],")")
 
 ### Non-parametric ATE estimation (data DAG)
-sl_tmle_data <- tmle(Y=Y, A=A, W=W_data, family="binomial", V=5,
+sl_tmle_data <- tmle(Y=Y, A=A, W=W_data, family="binomial", V=10,
                      Q.SL.library = sl_libs,
                      g.SL.library = sl_libs)
 cat("sl_tmle_data:", sl_tmle_data$estimates[[2]][[1]],";", "95%CI(", sl_tmle_data$estimates[[2]][[3]],")")
 
 
 ### Non-parametric ATE estimation (doctor DAG)
-sl_tmle_doc <- tmle(Y=Y_doc, A=A_doc, W=W_doc, family="binomial", V=5,
+sl_tmle_doc <- tmle(Y=Y_doc, A=A_doc, W=W_doc, family="binomial", V=10,
                     Q.SL.library = sl_libs,
                     g.SL.library = sl_libs)
 cat("sl_tmle_doc:", sl_tmle_doc$estimates[[2]][[1]],";", "95%CI(", sl_tmle_doc$estimates[[2]][[3]],")")
