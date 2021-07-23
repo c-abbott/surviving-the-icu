@@ -1,6 +1,14 @@
 import numpy as np
 import statsmodels
 
+class RegWrapper:
+    def __init__(self, classifier):
+        self.classifier = classifier
+    def fit(self, X, y, **kwargs):
+        return self.classifier.fit(X, y, **kwargs)
+    def predict(self, X):
+        return self.classifier.predict_proba(X)[:, 1]
+
 def naive_estimate(df, treatment, outcome, treatment_type=None):
     """
     Performs estimate of ATE without adjusting for any counfounding.
