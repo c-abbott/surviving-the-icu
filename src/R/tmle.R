@@ -35,28 +35,27 @@ A_doc <- csdh_burr$drain
 
 # SuperLearner models
 "SL.hal9001" <- hal9001::SL.hal9001 # scalable highly adaptive lasso (HAL)
-sl_libs <- c("SL.glm", "SL.step", "SL.glm.interaction", "SL.earth", 
-             "SL.ranger", "SL.xgboost", "SL.hal9001")
+sl_libs <- c("SL.glm", "SL.step", "SL.glm.interaction", "SL.earth", "SL.hal9001")
 
 ### Parametric ATE estimation with TMLE (min DAG)
 tmle_min <- tmle(Y=Y, A=A, W=W_min)
-cat("tmle_min_psi:", tmle_min$estimates[[2]][[1]],";", "95%CI(", tmle_min$estimates[[2]][[3]],")")
+cat("\ntmle_min_psi:", tmle_min$estimates[[2]][[1]],";", "95%CI(", tmle_min$estimates[[2]][[3]],")")
 
 ### Non-parametric ATE estimation with TMLE (min DAG)
-sl_tmle_min <- tmle(Y=Y, A=A, W=W_min, family="binomial", V=10,
+sl_tmle_min <- tmle(Y=Y, A=A, W=W_min, family="binomial", V=5,
                     Q.SL.library = sl_libs,
                     g.SL.library = sl_libs)
-cat("sl_tmle_min:", sl_tmle_min$estimates[[2]][[1]],";", "95%CI(", sl_tmle_min$estimates[[2]][[3]],")")
+cat("\nsl_tmle_min:", sl_tmle_min$estimates[[2]][[1]],";", "95%CI(", sl_tmle_min$estimates[[2]][[3]],")")
 
 ### Non-parametric ATE estimation (data DAG)
-sl_tmle_data <- tmle(Y=Y, A=A, W=W_data, family="binomial", V=10,
+sl_tmle_data <- tmle(Y=Y, A=A, W=W_data, family="binomial", V=5,
                      Q.SL.library = sl_libs,
                      g.SL.library = sl_libs)
-cat("sl_tmle_data:", sl_tmle_data$estimates[[2]][[1]],";", "95%CI(", sl_tmle_data$estimates[[2]][[3]],")")
+cat("\nsl_tmle_data:", sl_tmle_data$estimates[[2]][[1]],";", "95%CI(", sl_tmle_data$estimates[[2]][[3]],")")
 
 
 ### Non-parametric ATE estimation (doctor DAG)
-sl_tmle_doc <- tmle(Y=Y_doc, A=A_doc, W=W_doc, family="binomial", V=10,
+sl_tmle_doc <- tmle(Y=Y_doc, A=A_doc, W=W_doc, family="binomial", V=5,
                     Q.SL.library = sl_libs,
                     g.SL.library = sl_libs)
-cat("sl_tmle_doc:", sl_tmle_doc$estimates[[2]][[1]],";", "95%CI(", sl_tmle_doc$estimates[[2]][[3]],")")
+cat("\nsl_tmle_doc:", sl_tmle_doc$estimates[[2]][[1]],";", "95%CI(", sl_tmle_doc$estimates[[2]][[3]],")")
