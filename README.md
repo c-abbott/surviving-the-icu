@@ -12,32 +12,7 @@ This folder contains all iterations of the `csdh` dataset that was used for this
 
 **The final and most important versions** are **`csdh_final`**, which was used for the minimum and data-driven causal models, and **`csdh_burr`** which was used for the expert causal model.
 ## `src`
-The `src` folder contains all the source code used to conduct throughout this project and is stuctured as follows as shown below. 
-
-## `R`
-This folder contains all `R` scripts which were used towards the back-end of the project primarily for producing figures i.e. `ate_viz`, `missing_data_viz`, `refuters_viz`, and `ridges`, but also conducting the targeted maximum likelihood estimation of the ATE (`tmle`), as well as for model robustness analysis (`mean_deviation`).
-
-## `causal_graphs`
-This folder contains all the plain text causal graph files which were necessary for specifying you causal model in a form that was understandable to the DoWhy causal inference framework.
-
-## `helpers`
-This folder contains two Python scripts, `dowhy_helpers.py` and `meta_model_helpers.py`, which provide a handful of helper functions which aided in tidying up the appearance of the Jupyter Notebooks used throughout this project by reducing the amount of repeated code. The `dowhy_helpers.py` script was used for the `csdh_propensity_estimation.ipynb` and `csdh_regression_estimation.ipynb` notebooks, meanwhile `meta_model_helpers.py` was used for `doc_dag_meta_model_selection.ipynb` and `cate_estimation.ipynb`.
-
-## `notebooks`
-This folder contains all the Jupyter Notebooks that were created throughout this project. For the ease of marking, the notebooks relevant to the final report produced have been rendered in `html` format and included in the `html_notebooks` folder. The details of each notebook are as follows:
-
-- `associations` - contains all the associational calculations used to create the data-driven and expert causal models.
-- `cate_estimation` - contains the pipeline which produced the double machine learning CATE trees specified in §5.4.2 of the final report using DoWhy and EconML.
-- `csdh_eda` - contains the initial, unrefined EDA conducted on the `csdh` dataset. The final figures produced for the EDA section of the report were created using `ridges.R` in the `R` folder.
-- `csdh_propensity_estimation` - contains all results produced for the propensity based estimators using DoWhy; from modelling to refutation.
-- `csdh_regression_estimation` - contains all results produced for the regression based estimators using DoWhy; from modelling to refutation.
-- `doc_meta_model_selection` - contains the model selection pipeline for the double machine learning CATE estimator used under the expert causal model. This is where you will find why the XGBClassifier was used.
-
-The other notebooks which remain in `ipynb` format have been left as part of the submission as evidence of what else was investigated during the time of this project.
-
-## `output`
-This folder contains all the outputs produced throughout the project.
-
+The `src` folder contains all the source code used to conduct throughout this project and is stuctured as follows:
 ```
 └── src
     ├── R
@@ -123,3 +98,27 @@ This folder contains all the outputs produced throughout the project.
             ├── refuters.csv
             └── refuters.xlsx
 ```
+
+## `R`
+This folder contains all `R` scripts which were used towards the back-end of the project primarily for producing figures i.e. `ate_viz`, `missing_data_viz`, `refuters_viz`, and `ridges`, but also conducting the targeted maximum likelihood estimation of the ATE (`tmle`), as well as for model robustness analysis (`mean_deviation`).
+
+## `causal_graphs`
+This folder contains all the plain text causal graph files which were necessary for specifying you causal model in a form that was understandable to the DoWhy causal inference framework.
+
+## `helpers`
+This folder contains two Python scripts, `dowhy_helpers.py` and `meta_model_helpers.py`, which provide a handful of helper functions which aided in tidying up the appearance of the Jupyter Notebooks used throughout this project by reducing the amount of repeated code. The `dowhy_helpers.py` script was used for the `csdh_propensity_estimation.ipynb` and `csdh_regression_estimation.ipynb` notebooks, meanwhile `meta_model_helpers.py` was used for `doc_dag_meta_model_selection.ipynb` and `cate_estimation.ipynb`.
+
+## `notebooks`
+This folder contains all the Jupyter Notebooks that were created throughout this project. For the ease of marking, the notebooks relevant to the final report produced have been rendered in `html` format and included in the `html_notebooks` folder. The details of each notebook are as follows:
+
+- `associations` - contains all the associational calculations used to create the data-driven and expert causal models.
+- `cate_estimation` - contains the pipeline which produced the double machine learning CATE trees specified in §5.4.2 of the final report using DoWhy and EconML.
+- `csdh_eda` - contains the initial, unrefined EDA conducted on the `csdh` dataset. The final figures produced for the EDA section of the report were created using `ridges.R` in the `R` folder.
+- `csdh_propensity_estimation` - contains all results produced for the propensity based estimators using DoWhy; from modelling to refutation.
+- `csdh_regression_estimation` - contains all results produced for the regression based estimators using DoWhy; from modelling to refutation.
+- `doc_meta_model_selection` - contains the model selection pipeline for the double machine learning CATE estimator used under the expert causal model. This is where you will find why the XGBClassifier was used.
+
+The other notebooks which remain in `ipynb` format have been left as part of the submission as evidence of what else was investigated during the time of this project.
+
+## `output`
+This folder contains all the outputs produced throughout the project.
